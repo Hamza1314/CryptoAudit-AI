@@ -1,0 +1,31 @@
+# ==========================================
+# CryptoAudit AI - Python Dependencies
+# ==========================================
+
+# --- Web Framework & Server ---
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6  # Required for file uploads in FastAPI
+
+# --- AI & LLM Integration ---
+openai>=1.10.0           # For OpenAI-compatible local/remote LLMs
+httpx>=0.26.0            # For async HTTP requests to AI endpoints
+
+# --- CLI & Terminal UI (for backend/crypto_audit.py) ---
+click>=8.1.0             # For building the CLI scanner tool
+rich>=13.7.0             # For beautiful terminal output and progress bars
+
+# --- Report Generation (Markdown, HTML, JSON) ---
+jinja2>=3.1.0            # For HTML report templating
+markdown>=3.5.0          # For Markdown report generation
+
+# --- Utilities & Configuration ---
+python-dotenv>=1.0.0     # For loading environment variables/secrets
+pydantic>=2.5.0          # For data validation (comes with FastAPI, but good to pin)
+pyyaml>=6.0.0            # For parsing configuration files
+
+# --- Advanced Code Parsing (Optional) ---
+# Uncomment the lines below if you decide to use Tree-sitter for deep AST 
+# parsing instead of just Regex/AST built-in modules.
+# tree-sitter>=0.21.0
+# tree-sitter-languages>=1.10.0
