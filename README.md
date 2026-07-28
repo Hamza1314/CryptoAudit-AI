@@ -18,7 +18,18 @@ It ships as **two interfaces**:
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
 
+
+
 # 📸 Dashboard Preview
+
+### Main Dashboard
+![Dashboard Overview](docs/screenshoots/dashborad_overview.jpeg)
+
+### Vulnerability Findings
+![Findings Panel](docs/screenshoots/findings-panel.jpeg)
+
+### AI Remediation & Evidence
+![AI Remediation](docs/screenshoots/ai-remediation.jpeg)
 
 
 
@@ -242,8 +253,12 @@ This project is licensed under the MIT License. See the LICENSE file for details
 # ⭐ Support
 
 If you found this project useful:
+
 ⭐ Star the repository
+
 🐛 Report issues
+
 💡 Suggest new security rules
+
 🤝 Contribute improvements through pull requests
 
