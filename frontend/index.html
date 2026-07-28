@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryptographic Security Audit Platform</title>
+  <meta name="description" content="Static code audit scanner and AI remediation tool for cryptographic vulnerabilities">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div>CryptoAudit AI <span style="font-weight:400; font-size:0.8rem; color:var(--accent-cyan); margin-left:0.4rem;">v1.0</span></div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-outline" id="export-json-btn">Export JSON</button>
+      <button class="btn btn-primary" id="export-md-btn">Export Markdown Report</button>
+    </div>
+  </nav>
+
+  <!-- App Main Layout -->
+  <div class="app-container">
+    
+    <!-- Left Sidebar: Controls & Sample Repos -->
+    <aside class="sidebar">
+      <div class="card">
+        <div class="card-title">📁 Scan Target Repository</div>
+        
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon">📥</div>
+          <div style="font-weight: 600; margin-bottom: 0.25rem;">Drop folder / source files</div>
+          <div class="dropzone-text">Supports .py, .js, .ts, .java, .go, .c, .env</div>
+          <input type="file" id="file-input" multiple style="display: none;">
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <div class="card-title" style="font-size: 0.875rem;">⚡ Pre-loaded Test Targets</div>
+          <div class="sample-selector">
+            <button class="sample-btn active" data-sample="python_auth_remediated">
+              🛡️ Python Auth (100% Remediated)
+              <div style="font-size:0.75rem; color:var(--diff-add-text);">PBKDF2, CSPRNG, AES-GCM, TLS</div>
+            </button>
+            <button class="sample-btn" data-sample="python_auth_vulnerable">
+              🐍 Python Auth (Vulnerable Demo)
+              <div style="font-size:0.75rem; color:var(--text-dim);">MD5, ECB mode, hardcoded key</div>
+            </button>
+            <button class="sample-btn" data-sample="node_payment">
+              💚 Node.js Payment Gateway
+              <div style="font-size:0.75rem; color:var(--text-dim);">Math.random, DES, unsafe TLS</div>
+            </button>
+            <button class="sample-btn" data-sample="java_crypto">
+              ☕ Java Legacy Crypto Module
+              <div style="font-size:0.75rem; color:var(--text-dim);">Weak RSA 1024, MessageDigest</div>
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="scan-btn" style="margin-top: 1.5rem;">
+          🔍 Re-Run Security Audit
+        </button>
+      </div>
+
+      <!-- Vulnerability Rule Catalog Info -->
+      <div class="card">
+        <div class="card-title">📖 Audit Rule Coverage</div>
+        <ul style="font-size: 0.8125rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.4rem; padding-left: 1rem;">
+          <li>Weak Hashing (MD5 / SHA-1)</li>
+          <li>Weak Password Storage (PBKDF2/bcrypt)</li>
+          <li>Hardcoded Secrets & API Keys</li>
+          <li>Insecure PRNGs (random vs CSPRNG)</li>
+          <li>Cipher Modes (AES-ECB vs GCM)</li>
+          <li>Insecure Key Sizes (< 2048-bit RSA)</li>
+          <li>TLS Certificate Validation</li>
+          <li>JWT `alg: none` Vulnerabilities</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main style="display: flex; flex-direction: column; gap: 1.5rem;">
+      
+      <!-- Metrics Overview -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Security Score</div>
+          <div class="metric-value" id="score-value" style="color: var(--accent-cyan);">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Total Findings</div>
+          <div class="metric-value" id="total-findings">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Critical</div>
+          <div class="metric-value" id="cnt-critical" style="color: var(--severity-critical);">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">High Severity</div>
+          <div class="metric-value" id="cnt-high" style="color: var(--severity-high);">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Medium Severity</div>
+          <div class="metric-value" id="cnt-medium" style="color: var(--severity-medium);">--</div>
+        </div>
+      </section>
+
+      <!-- Search & Audit Findings Workspace -->
+      <section style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem;">
+        
+        <!-- Left: Findings List -->
+        <div class="card findings-container">
+          <div class="table-header-controls">
+            <div style="font-weight: 700; font-size: 1.1rem;">Vulnerability Findings</div>
+            <input type="text" class="search-box" id="search-input" placeholder="Search finding or file...">
+          </div>
+          <div class="findings-list" id="findings-list">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+        <!-- Right: Detail Panel & AI Remediation -->
+        <div class="card" style="position: sticky; top: 5.5rem; height: fit-content;">
+          <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">AI Remediation & Evidence</div>
+          <div id="detail-panel" class="detail-panel">
+            <div class="empty-state">
+              <p>Select a vulnerability finding from the list to inspect AI risk explanations and code patches.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/rules_db.js"></script>
+  <script src="js/static_scanner.js"></script>
+  <script src="js/ai_explainer.js"></script>
+  <script src="js/report_builder.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
